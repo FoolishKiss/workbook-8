@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7884f7ec-f651-4455-99cc-a69e5d5f8fa9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pluralsight/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pluralsight/App.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
