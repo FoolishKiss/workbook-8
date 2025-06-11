@@ -1,6 +1,7 @@
 package com.pluralsight;
 
 import com.mysql.cj.protocol.Resultset;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
 import java.util.Scanner;
@@ -21,13 +22,14 @@ public class App {
         String username = args[0];
         String password = args[1];
 
-        // Scanner to get user input
-        Scanner userInput = new Scanner(System.in);
 
-        try (Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/northwind",
-                username,
-                password)) {
+        try (Scanner userInput = new Scanner(System.in); BasicDataSource dataSource = new BasicDataSource()) {
+
+            dataSource.setUrl("jdbc:mysql://localhost:3306/northwind");
+            dataSource.setUsername("root");
+            dataSource.setPassword("yearup");
+
+            Connection connection = dataSource.getConnection();
 
             // Variable for menu loop
             boolean menuOn = true;
@@ -60,7 +62,7 @@ public class App {
                         break;
                     case 0:
                         // If user picks 0, exit loop
-                        menuOn  = false;
+                        menuOn = false;
                         System.out.println("Goodbye");
                         break;
                     default:
@@ -72,12 +74,9 @@ public class App {
         } catch (SQLException e) {
             // Catch any database errors and show message
             System.out.println("Database error: " + e.getMessage());
-        } finally {
-            // Close the scanner
-            userInput.close();
         }
-
     }
+    
     // Method to show list of all products from database
     private static void showProducts(Connection connection) {
 
