@@ -2,6 +2,7 @@ package com.pluralsight;
 
 import com.pluralsight.dao.ShipperDataManager;
 import com.pluralsight.models.Shipper;
+import com.pluralsight.services.ShipperServices;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.util.List;
@@ -29,8 +30,9 @@ public class App {
         dataSource.setPassword(password);
 
         ShipperDataManager dataManager = new ShipperDataManager(dataSource);
+        ShipperServices service = new ShipperServices(dataManager);
 
-        int id = dataManager.insertShipper("Miller Global Shipping", "214-555-1234");
+        int id = service.addShipper("Miller Global Shipping", "(214)-567-1234");
         System.out.println("Insert ID: " + id);
 
         List<Shipper> shippers = dataManager.getAllShippers();
