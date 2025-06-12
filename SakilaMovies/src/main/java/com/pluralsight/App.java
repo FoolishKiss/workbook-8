@@ -1,6 +1,7 @@
 package com.pluralsight;
 
 import com.pluralsight.dao.DataManager;
+import com.pluralsight.services.ActorServices;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
@@ -28,34 +29,50 @@ public class App {
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 
-        // Setup data access layer
+        // Setup data access layer and services
         DataManager dataManager = new DataManager(dataSource);
+        ActorServices actorServices = new ActorServices(dataManager);
 
 
         // Outer try with resources to set up scanner and data source
-        try (Scanner userInput = new Scanner(System.in); BasicDataSource dataSource = new BasicDataSource()) {
+        try (Scanner userInput = new Scanner(System.in)) {
 
-                // Ask user for actor last name and stores it in variable lastName
-                System.out.println("Enter actor's last name: ");
-                String lastName = userInput.nextLine();
+            System.out.println("=== Sakila Movie Database ===\n");
 
-                // Call method to search database for actors matching user input
-                searchActorsByLastName(connection, lastName);
+            // Ask user for actor last name and stores it in variable lastName
+            System.out.println("Enter actor's last name: ");
+            String lastName = userInput.nextLine().trim();
 
-                // Ask user for actor first name and stores it in variable firstName
-                System.out.println("\nEnter actor's first name: ");
-                String firstName = userInput.nextLine();
+            // Call method to search database for actors matching user input
+            actorServices.showActorsByLastName(lastName);
 
-                // Ask user for actor last name again and stores it in variable lastName
-                System.out.println("Enter actor's last name again: ");
-                lastName = userInput.nextLine();
+            // Ask user to enter actor id to show their movies
+            System.out.println("\nEnter actor's ID to see their movies: ");
 
-                // Call method to show all movies for actors matching user input
-                showFilmsByActor(connection, firstName, lastName);
+            // Inner try to handle input errors
+            try {// Convert String to int
+                 int actorId = Integer.parseInt(userInput.nextLine().trim());
 
-            // Any database error
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+                 // Runs filmSrevices showFilmByActorId method
+                 filmServices.showFilmsByActorId(actorId);
+
+              // Handles invalid number
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid actor ID");
+            }
+
+            // Catch and print any exception
+        } catch (Exception e) {
+            System.err.println("An Error occurred: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            
+            // Close the datasource
+            try {
+                dataSource.close();
+            } catch (SQLException e) {
+                System.err.println("Error closing datasource: " + e.getMessage());
+            }
         }
     }
 
