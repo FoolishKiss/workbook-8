@@ -25,7 +25,7 @@ public class ActorServices {
 
         // If no actor found print out message
         if(actors.isEmpty()) {
-            System.out.println("No actors found with last name: " + lastName);
+            System.out.println("\nNo actors found with last name: " + lastName);
         } else {
             // Print out header
             System.out.printf("%-5s %-15s %-15s\n", "ID", "First Name", "Last Name");

@@ -25,7 +25,7 @@ public class FilmServices {
 
         // If no films print out message
         if (films.isEmpty()) {
-            System.out.println("No films found for actor ID: " + actorId);
+            System.out.println("\nNo films found for actor ID: " + actorId);
         } else {
             // If found print out header
             System.out.println("\n----- Movies for Actor ID" + actorId + "------------------");
@@ -45,7 +45,7 @@ public class FilmServices {
     }
     // Shows the details of the first 3 films
     private void displayFilmDetails(List<Film> films, int maxCount) {
-        System.out.println("\n----- Film Details (First " + maxCount + " films)-----");
+        System.out.println("\n----- Film Details (First " + maxCount + " films)-----\n");
         int count = 0;
 
         for (Film film : films) {

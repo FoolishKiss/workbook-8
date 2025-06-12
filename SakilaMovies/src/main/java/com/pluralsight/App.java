@@ -3,6 +3,7 @@ package com.pluralsight;
 import com.pluralsight.dao.DataManager;
 import com.pluralsight.services.ActorServices;
 import com.pluralsight.services.FilmServices;
+import com.pluralsight.ui.UserInterface;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
@@ -39,33 +40,50 @@ public class App {
         // Outer try with resources to set up scanner and data source
         try (Scanner userInput = new Scanner(System.in)) {
 
-            System.out.println("=== Sakila Movie Database ===\n");
+            // Create user interface
+            UserInterface ui = new UserInterface(userInput, actorServices, filmServices);
 
-            // Ask user for actor last name and stores it in variable lastName
-            System.out.println("Enter actor's last name: ");
-            String lastName = userInput.nextLine().trim();
+            // Show welcome message
+            ui.welcome();
 
-            // Call method to search database for actors matching user input
-            actorServices.showActorsByLastName(lastName);
+            // Flag to control app loop
+            boolean appOn = true;
 
-            // Ask user to enter actor id to show their movies
-            System.out.println("\nEnter actor's ID to see their movies: ");
+            // Loop until user exits
+            while (appOn) {
 
-            // Inner try to handle input errors
-            try {// Convert String to int
-                 int actorId = Integer.parseInt(userInput.nextLine().trim());
+                // try block to catch errors
+                try {
+                    // Show the menu
+                    ui.menu();
+                    // Get valid choice
+                    int choice = ui.getValidMenuChoice();
 
-                 // Runs filmServices showFilmByActorId method
-                 filmServices.showFilmsByActorId(actorId);
+                    // Switch statement to pick method for user choice
+                    switch (choice) {
+                        case 1:
+                            ui.searchActorsByLastName();
+                            break;
+                        case 2:
+                            ui.goodbye();
+                            appOn = false;
+                            break;
+                        default:
+                            System.out.println("Invalid choice. Try again.");
+                    }
 
-              // Handles invalid number
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid actor ID");
+                    // Divider
+                    if (appOn) {
+                        ui.divider();
+                    }
+                } catch (Exception e) {
+                    ui.errorMessage(e.getMessage());
+                }
             }
 
             // Catch and print any exception
         } catch (Exception e) {
-            System.err.println("An Error occurred: " + e.getMessage());
+            System.err.println("A critical error occurred: " + e.getMessage());
             e.printStackTrace();
         } finally {
 
