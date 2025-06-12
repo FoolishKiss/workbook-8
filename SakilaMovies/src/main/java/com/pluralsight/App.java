@@ -2,6 +2,7 @@ package com.pluralsight;
 
 import com.pluralsight.dao.DataManager;
 import com.pluralsight.services.ActorServices;
+import com.pluralsight.services.FilmServices;
 import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.sql.*;
@@ -32,6 +33,7 @@ public class App {
         // Setup data access layer and services
         DataManager dataManager = new DataManager(dataSource);
         ActorServices actorServices = new ActorServices(dataManager);
+        FilmServices filmServices = new FilmServices(dataManager);
 
 
         // Outer try with resources to set up scanner and data source
@@ -53,7 +55,7 @@ public class App {
             try {// Convert String to int
                  int actorId = Integer.parseInt(userInput.nextLine().trim());
 
-                 // Runs filmSrevices showFilmByActorId method
+                 // Runs filmServices showFilmByActorId method
                  filmServices.showFilmsByActorId(actorId);
 
               // Handles invalid number
@@ -66,7 +68,7 @@ public class App {
             System.err.println("An Error occurred: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            
+
             // Close the datasource
             try {
                 dataSource.close();

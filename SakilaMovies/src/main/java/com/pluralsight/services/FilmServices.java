@@ -1,60 +1,77 @@
 package com.pluralsight.services;
 
+import com.pluralsight.dao.DataManager;
+import com.pluralsight.models.Film;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class FilmServices {
 
+    private DataManager dataManager;
 
-    // Method to search for all films actor is in
-    private static void showFilmsByActor(Connection connection, String firstName, String lastName) {
+    public FilmServices(DataManager dataManager) {
+        this.dataManager = dataManager;
+    }
 
-        // Prepare the sql statement
-        String query = """
-                SELECT f.film_id, f.title
-                FROM actor a
-                JOIN film_actor fa ON a.actor_id = fa.actor_id
-                JOIN film f ON fa.film_id = f.film_id
-                WHERE a.first_name = ? and a.last_name = ?
-                """;
-        try( // Open try with resources to prepare the sql query
-             PreparedStatement statement = connection.prepareStatement(query)
-        ) { // Bind firstName variable to the first and lastName variable to second ? in sql query
-            statement.setString(1, firstName);
-            statement.setString(2, lastName);
+    // Method to show all films from actorId matching user input
+    public void showFilmsByActorId(int actorId) {
 
-            // Execute query
-            try (ResultSet results = statement.executeQuery()) {
+        // Get list of matching films from dao with actorId
+        List<Film> films = dataManager.getFilmsByActorId(actorId);
 
-                // Flag - haven't found any results yet
-                boolean found = false;
+        // If no films print out message
+        if (films.isEmpty()) {
+            System.out.println("No films found for actor ID: " + actorId);
+        } else {
+            // If found print out header
+            System.out.println("\n----- Movies for Actor ID" + actorId + "------------------");
+            System.out.printf("%-5s %-50s %-6s %-6s%n", "ID", "Title", "Year", "Length");
+            System.out.println("-----------------------------------------------------------------------");
 
-                // Header
-                System.out.printf("%-5s %-50s\n", "ID", "Title");
-                System.out.println("--------------------------------------");
-
-                // Loops through each row and prints out results
-                while (results.next()) {
-                    int filmId = results.getInt("film_id");
-                    String title = results.getString("title");
-                    System.out.printf("%-5s %-50s\n", filmId, title);
-
-                    // If at least one row exists enter loop
-                    found = true;
-                }
-                // If no records found print out message
-                if (!found) {
-                    System.out.println("No films found for: " +firstName + " " + lastName);
-                }
-
+            // Loop through films and prints each row
+            for (Film film : films) {
+                System.out.printf("%-5s %-50s %-6s %-6s%n", film.getFilmId(), film.getTitle(), film.getReleaseYear(), film.getLength());
             }
-            // If errors print out
-        } catch (SQLException e) {
-            System.out.println("Error getting films: " + e.getMessage());;
+
+            // After main list, print out info for first 3
+            displayFilmDetails(films, 3);
+
         }
 
+    }
+    // Shows the details of the first 3 films
+    private void displayFilmDetails(List<Film> films, int maxCount) {
+        System.out.println("\n----- Film Details (First " + maxCount + " films)-----");
+        int count = 0;
+
+        for (Film film : films) {
+            if (count >= maxCount)
+                break;
+
+            System.out.println("Title: " + film.getTitle());
+            System.out.println("Description: " + film.getDescription());
+            System.out.println("Release Year: " + film.getReleaseYear());
+            System.out.println("Length: " + film.getLength());
+            System.out.println("-----------------------------------------------");
+            count++;
+
+        }
+
+    }
+
+
+    // Return list of films by actorId
+    public List<Film> getFilmsByActorId(int actorId) {
+        return dataManager.getFilmsByActorId(actorId);
+    }
+
+    // Return list of films by actors full name
+    public List<Film> getFilmsByActorName(String firstName, String lastName) {
+        return dataManager.getFilmsByActorName(firstName, lastName);
     }
 
 }

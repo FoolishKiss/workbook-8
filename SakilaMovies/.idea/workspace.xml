@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="7884f7ec-f651-4455-99cc-a69e5d5f8fa9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/com/pluralsight/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pluralsight/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pluralsight/dao/DataManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pluralsight/dao/DataManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/pluralsight/services/FilmServices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/pluralsight/services/FilmServices.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
