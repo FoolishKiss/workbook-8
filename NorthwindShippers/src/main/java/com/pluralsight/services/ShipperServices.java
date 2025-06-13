@@ -29,4 +29,19 @@ public class ShipperServices {
         return dataManager.getAllShippers();
     }
 
+    // Method to update phone
+    public boolean updatePhone(int shipperId, String newPhone) {
+
+        // Return the results from data access
+        return dataManager.updatePhone(shipperId, newPhone);
+    }
+
+    // Method to delete shipper
+    public boolean deleteShipper(int shipperId) {
+
+        // Return the results from data access
+        return dataManager.deleteShipper(shipperId);
+    }
+
+
 }

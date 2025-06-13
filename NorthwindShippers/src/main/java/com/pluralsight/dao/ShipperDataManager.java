@@ -93,4 +93,72 @@ public class ShipperDataManager {
         // Return list of shippers
         return shippers;
     }
+
+    // Method to update phone number
+    public boolean updatePhone(int shipperId, String newPhone) {
+
+        // Prepare sql query
+        String query = """
+                UPDATE shippers
+                SET Phone = ?
+                WHERE ShipperID = ?
+                """;
+
+        try (// Open database
+             Connection connection = dataSource.getConnection();
+
+             // Create sql query
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            // Bind ? to variables
+            statement.setString(1, newPhone);
+            statement.setInt(1, shipperId);
+
+            // Execute update statement
+            int rowsAffected = statement.executeUpdate();
+
+            // If one row was updated return true; else false
+            return rowsAffected > 0;
+            // Catch sql errors and wraps in runtime exception and rethrow
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating phone: " + e.getMessage(), e);
+        }
+    }
+
+    // Method to delete a shipper
+    public boolean deleteShipper(int shipperId) {
+
+        // Stops from deleting if user picks 3 or lower
+        if (shipperId <= 3) {
+            System.out.println("Cannot delete protected shippera 1-3.");
+            return false;
+        }
+
+        // Prepare sql query
+        String query = """
+                DELETE FROM shippers
+                WHERE ShipperID = ?
+                """;
+
+        try (// Open database
+             Connection connection = dataSource.getConnection();
+
+             // Create sql query
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            // Bind ? to variables
+            statement.setInt(1, shipperId);
+
+            // Execute update statement
+            int rowsAffected = statement.executeUpdate();
+
+            // If one row was updated return true; else false
+            return rowsAffected > 0;
+            // Catch sql errors and wraps in runtime exception and rethrow
+        } catch (SQLException e) {
+            throw new RuntimeException("Error updating phone: " + e.getMessage(), e);
+        }
+
+    }
+
 }

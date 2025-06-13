@@ -19,38 +19,39 @@ public class UserInterface {
     // Method to run the user interface
     public void run() {
 
-        // Print welcome message
-        System.out.println("Northwind Shippers");
+        // Flag to control app loop
+        boolean appOn = true;
 
-        // Ask user for shipper name
-        System.out.println("Enter new shipper name: ");
-        // Read and store line in name variable
-        String name = userInput.nextLine();
+        while (appOn) {
 
-        // Ask user to enter phone number
-        System.out.println("Enter phone: ");
-        // Read and store line in phone variable
-        String phone = userInput.nextLine();
+            // Calls menu method
+            menu();
 
-        // Call addShipper method from ShipperServices
-        int id = service.addShipper(name, phone);
+            // Stores user input as int in variable choice
+            int choice = getIntInput("Enter choice: ");
 
-        // Show confirmation message with shipper ID
-        System.out.println("New shipper inserted with ID: " + id);
-
-        // Header
-        System.out.println("\nAll shippers:");
-
-        // Get list of shippers from ShipperServices
-        List<Shipper> shippers = service.listShipper();
-
-        // Loop through the list of shippers
-        for (Shipper s : shippers) {
-            // Print shipper
-            System.out.println(s);
+            switch (choice) {
+                case 1 -> insertShipper();
+                case 2 -> listShipper();
+                case 3 -> updatePhone();
+                case 4 -> deleteShipper();
+                case 5 -> appOn = false;
+                default -> System.out.println("Invalid choice.");
+            }
         }
 
+        // Exit message
+        System.out.println("Goodbye");
 
+    }
+
+    private void menu() {
+        System.out.println("\n--- Northwind Shippers ---");
+        System.out.println("1) Add Shipper");
+        System.out.println("2) List Shippers");
+        System.out.println("3) Update Phone");
+        System.out.println("4) Delete Shipper");
+        System.out.println("5) Exit");
     }
 
 }
