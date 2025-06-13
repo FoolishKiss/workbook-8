@@ -3,9 +3,12 @@ package com.pluralsight;
 import com.pluralsight.dao.ShipperDataManager;
 import com.pluralsight.models.Shipper;
 import com.pluralsight.services.ShipperServices;
+import com.pluralsight.ui.UserInterface;
 import org.apache.commons.dbcp2.BasicDataSource;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
@@ -29,14 +32,30 @@ public class App {
         dataSource.setUsername(username);
         dataSource.setPassword(password);
 
+        // Create instance of ShipperDataManager
         ShipperDataManager dataManager = new ShipperDataManager(dataSource);
+        // Create instance of ShipperServices
         ShipperServices service = new ShipperServices(dataManager);
 
-        int id = service.addShipper("Miller Global Shipping", "(214)-567-1234");
-        System.out.println("Insert ID: " + id);
+        // Try with resources creates Scanner
+        try (Scanner userInput = new Scanner(System.in)) {
 
-        List<Shipper> shippers = dataManager.getAllShippers();
-        for (Shipper shipper : shippers)
-            System.out.println(shipper);
+            // Create instance of UserInterface with passed Scanner and ShipperServices
+            UserInterface ui = new UserInterface(userInput, service);
+
+            // Starts user interface
+            ui.run();
+
+            // Catch exceptions
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Nested try catch to close database
+            try {
+                dataSource.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
