@@ -112,7 +112,7 @@ public class ShipperDataManager {
 
             // Bind ? to variables
             statement.setString(1, newPhone);
-            statement.setInt(1, shipperId);
+            statement.setInt(2, shipperId);
 
             // Execute update statement
             int rowsAffected = statement.executeUpdate();
